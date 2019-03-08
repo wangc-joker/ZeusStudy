@@ -95,6 +95,18 @@ public class RefInvoke {
         return null;
     }
 
+    public static Object invokeStaticMethod(String className, String methodName
+            ) {
+        try {
+            Class c = Class.forName(className);
+            return invokeStaticMethod(c,methodName,null,null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
     public static Object invokeStaticMethod(Class c, String methodName
             , Class[] pareTypes, Object[] pareValues) {
         try {

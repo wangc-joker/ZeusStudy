@@ -1,0 +1,8 @@
+{
+  "plugins": [
+    {
+      "PluginService": "jianqiang.com.testservice1.TestService1",
+      "StubService": "jianqiang.com.activityhook1.StubService"
+    }
+  ]
+}

@@ -30,10 +30,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="w.cong.plugin1.TestActivity1"/>
         <activity android:name=".ActivityA"/>
-
-        <service android:name="w.cong.plugin1.TestService1" />
+        <service android:name=".StubService"/>
     </application>
 
 </manifest>

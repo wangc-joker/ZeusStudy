@@ -6,14 +6,14 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/btnStartService1InPlugin1"
-        android:layout_width="158dp"
-        android:layout_height="wrap_content"
-        android:onClick="startServiceInPlugin"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:text="Create TestService1 in Plugin1"
-        app:layout_constraintTop_toTopOf="parent"/>
+    <!--<Button-->
+        <!--android:id="@+id/btnStartService1InPlugin1"-->
+        <!--android:layout_width="158dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:onClick="startServiceInPlugin"-->
+        <!--app:layout_constraintLeft_toLeftOf="parent"-->
+        <!--android:text="Create TestService1 in Plugin1"-->
+        <!--app:layout_constraintTop_toTopOf="parent"/>-->
 
     <Button
         android:id="@+id/btnStartActivityInPlugin1"
@@ -22,5 +22,5 @@
         android:onClick="startActivityInPlugin"
         android:text="start Activity in Plugin1"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnStartService1InPlugin1"/>
+        app:layout_constraintTop_toTopOf="parent"/>
 </android.support.constraint.ConstraintLayout>

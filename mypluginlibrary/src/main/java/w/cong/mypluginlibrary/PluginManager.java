@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import dalvik.system.DexClassLoader;
+
 public class PluginManager {
     public final static List<PluginItem> plugins = new ArrayList<PluginItem>();
 
@@ -28,6 +30,8 @@ public class PluginManager {
         mPackageInfo = RefInvoke.getFieldObject(application.getBaseContext(),"mPackageInfo");
         mBaseContext = application.getBaseContext();
         mNowResources = application.getResources();
+
+        Utils.context = application;
 
         try {
             AssetManager assetManager = application.getAssets();
@@ -104,6 +108,59 @@ public class PluginManager {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static volatile ClassLoader mNowClassLoader = null;
+    public static volatile ClassLoader mBaseClassLoader = null;
+
+    public static void init2(Application application){
+        mPackageInfo = RefInvoke.getFieldObject(application.getBaseContext(),"mPackageInfo");
+        mBaseContext = application.getBaseContext();
+        mNowResources = application.getResources();
+
+        try {
+            AssetManager assetManager = application.getAssets();
+            String[] paths = assetManager.list("");
+
+            ArrayList<String> pluginPaths = new ArrayList<String>();
+            for(String path : paths) {
+                if(path.endsWith(".apk")) {
+                    String apkName = path;
+
+                    Utils.extractAssets(mBaseContext, apkName);
+
+                    PluginItem item = generatePluginItem(apkName);
+                    plugins.add(item);
+
+                    pluginPaths.add(item.pluginPath);
+                }
+            }
+
+            reloadInstalledPluginResurces(pluginPaths);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        mNowClassLoader = mBaseContext.getClassLoader();
+        mBaseClassLoader = mBaseContext.getClassLoader();
+
+        ZeusClassLoader classLoader = new ZeusClassLoader(mBaseContext.getPackageCodePath(),
+                mBaseContext.getClassLoader());
+
+        File dexOutputDir = mBaseContext.getDir("dex",Context.MODE_PRIVATE);
+
+        final String dexOutputPath = dexOutputDir.getAbsolutePath();
+        for (PluginItem pluginItem:plugins) {
+            DexClassLoader dexClassLoader = new DexClassLoader(pluginItem.pluginPath,
+                    dexOutputPath,null,
+                    mBaseClassLoader);
+            classLoader.addPluginClassLoader(dexClassLoader);
+        }
+
+        RefInvoke.setFieldObject(mPackageInfo, "mClassLoader", classLoader);
+        Thread.currentThread().setContextClassLoader(classLoader);
+        mNowClassLoader = classLoader;
     }
 
 }
